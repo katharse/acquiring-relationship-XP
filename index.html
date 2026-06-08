@@ -5,9 +5,10 @@
     <title>Game Night II</title>
 </head>
 
-<body>
+<body style="background:#111; color:white; font-family:monospace; text-align:center; padding-top:100px;">
 
-```
+<div id="screen">
+
 <h1>🎮 GAME NIGHT II 🎮</h1>
 
 <p>Player 1: Leigh</p>
@@ -15,10 +16,65 @@
 
 <p>Objective: Unlock New Relationship Lore</p>
 
-<button onclick="alert('Quest loading...')">
-    START GAME
+<button onclick="startGame()" style="padding:10px 20px; font-size:16px; cursor:pointer;">
+START GAME
 </button>
-```
+
+</div>
+
+<script>
+
+function startGame() {
+  document.getElementById("screen").innerHTML = `
+    <h2>Loading Relationship Data...</h2>
+    <p>██████████ 100%</p>
+    <p>Analyzing compatibility...</p>
+    <p>Result: dangerously high affection levels</p>
+  `;
+
+  setTimeout(showQuest, 2500);
+}
+
+function showQuest() {
+  document.getElementById("screen").innerHTML = `
+    <h1>QUEST UNLOCKED</h1>
+
+    <p>Game Night II: The Lore Expansion Pack</p>
+    <p>Do you accept this mission?</p>
+
+    <button onclick="acceptQuest()" style="padding:10px 20px; font-size:16px; cursor:pointer;">
+      ACCEPT
+    </button>
+
+    <button id="noBtn" style="padding:10px 20px; font-size:16px; cursor:pointer;">
+      DECLINE
+    </button>
+  `;
+
+  const noBtn = document.getElementById("noBtn");
+
+  noBtn.addEventListener("mouseover", () => {
+    noBtn.style.position = "absolute";
+    noBtn.style.left = Math.random() * 80 + "vw";
+    noBtn.style.top = Math.random() * 80 + "vh";
+  });
+}
+
+function acceptQuest() {
+  document.getElementById("screen").innerHTML = `
+    <h1>QUEST ACCEPTED 🎉</h1>
+
+    <p>Your reward has been unlocked.</p>
+
+    <a href="PASTE_YOUR_GOOGLE_CALENDAR_LINK_HERE">
+      <button style="padding:10px 20px; font-size:16px; cursor:pointer;">
+        ADD TO CALENDAR
+      </button>
+    </a>
+  `;
+}
+
+</script>
 
 </body>
 </html>
