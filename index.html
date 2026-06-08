@@ -4,7 +4,6 @@
 <head>
     <title>Game Night Date Night</title>
 
-```
 <style>
 @keyframes gradientBG {
     0% { background-position: 0% 50%; }
@@ -12,15 +11,18 @@
     100% { background-position: 0% 50%; }
 }
 
-/* Floating hearts */
+/* Hearts (white + slightly “fat”) */
 .heart {
     position: fixed;
     top: -20px;
     left: 0;
-    color: #ff4d6d;
+    color: white;
     font-size: 14px;
+    font-weight: bold;
+    transform: scaleX(1.3);
     pointer-events: none;
     z-index: 1;
+    opacity: 0.9;
 }
 
 #screen {
@@ -58,8 +60,12 @@ h1, h2, p {
     text-shadow: 0 0 8px rgba(255,255,255,0.15);
 }
 
+input {
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 10px;
+}
 </style>
-```
 
 </head>
 
@@ -76,28 +82,11 @@ h1, h2, p {
 ">
 
 <div id="hearts"></div>
-
-<div id="screen">
-
-```
-<div class="panel">
-
-    <h1>🎮 GAME NIGHT DATE NIGHT 🎮</h1>
-
-    <p>Player 1: Leigh</p>
-    <p>Player 2: Antoine</p>
-
-    <p>Objective: Unlock New Relationship Lore</p>
-
-    <button onclick="startGame()">START GAME</button>
-
-</div>
-```
-
-</div>
+<div id="screen"></div>
 
 <script>
 
+/* HEARTS */
 function spawnHearts() {
     setInterval(() => {
         const heart = document.createElement("div");
@@ -111,9 +100,9 @@ function spawnHearts() {
         document.body.appendChild(heart);
 
         heart.animate([
-            { transform: "translateY(-10vh)", opacity: 0 },
-            { transform: "translateY(50vh)", opacity: 1 },
-            { transform: "translateY(120vh)", opacity: 0 }
+            { transform: "translateY(-10vh) scaleX(1.3)", opacity: 0 },
+            { transform: "translateY(50vh) scaleX(1.3)", opacity: 1 },
+            { transform: "translateY(120vh) scaleX(1.3)", opacity: 0 }
         ], {
             duration: duration,
             easing: "linear"
@@ -125,57 +114,136 @@ function spawnHearts() {
 
 spawnHearts();
 
-function startGame() {
-    document.getElementById("screen").innerHTML = `
-        <div class="panel">
-        <h2>Loading Relationship Data...</h2>
-        <p>██████████ 100%</p>
-        <p>Analyzing compatibility...</p>
-        <p>Result: dangerously high affection levels</p>
-        </div>
-    `;
+/* ENTRY SCREEN */
+document.getElementById("screen").innerHTML = `
+<div class="panel">
+<h1>🎮 GAME NIGHT DATE NIGHT 🎮</h1>
 
-    setTimeout(showQuest, 2000);
+<p>Player 1: Leigh</p>
+<p>Player 2: Antoine</p>
+
+<p>Objective: Unlock New Relationship Lore</p>
+
+<button onclick="gateCheck()">START GAME</button>
+</div>
+`;
+
+/* PRE-SCREEN */
+function gateCheck() {
+    document.getElementById("screen").innerHTML = `
+    <div class="panel">
+        <h2>Identity Check</h2>
+        <p>Are you the real Antoine?</p>
+
+        <button onclick="quizStart()">Yes</button>
+        <button onclick="fakeFail()">No</button>
+    </div>
+    `;
 }
 
-function showQuest() {
+function fakeFail() {
     document.getElementById("screen").innerHTML = `
-        <div class="panel">
-        <h1>QUEST UNLOCKED</h1>
-
-        <p>Game Night II: The Lore Expansion Pack</p>
-        <p>Do you accept this mission?</p>
-
-        <button onclick="acceptQuest()">ACCEPT</button>
-        <button id="noBtn">DECLINE</button>
-        </div>
+    <div class="panel">
+        <h2>Access Denied</h2>
+        <p>Nice try, impostor.</p>
+        <button onclick="gateCheck()">Try Again</button>
+    </div>
     `;
-
-    setTimeout(() => {
-        const noBtn = document.getElementById("noBtn");
-
-        if (!noBtn) return;
-
-        noBtn.addEventListener("mouseenter", () => {
-            noBtn.style.position = "absolute";
-            noBtn.style.left = Math.random() * 80 + "vw";
-            noBtn.style.top = Math.random() * 80 + "vh";
-        });
-    }, 50);
 }
 
-function acceptQuest() {
+/* QUIZ SYSTEM */
+let step = 0;
+
+function quizStart() {
+    step = 0;
+    q1();
+}
+
+/* Q1 */
+function q1() {
     document.getElementById("screen").innerHTML = `
-        <div class="panel">
-        <h1>QUEST ACCEPTED 🎉</h1>
+    <div class="panel">
+        <h2>Question 1</h2>
+        <p>When did you and Leigh first meet?</p>
 
-        <p>Your reward has been unlocked.</p>
+        <input id="answer" placeholder="MM/DD/YYYY"/>
+        <br>
+        <button onclick="checkQ1()">Submit</button>
+    </div>
+    `;
+}
 
-        <a href="https://calendar.app.google/JJ2WyeGQ7Fx1SSzA8">
-            <button>ADD TO CALENDAR</button>
+function checkQ1() {
+    alert("Trick question: she should always be called baby. Who's Leigh??? You failed!!");
+    q2();
+}
+
+/* Q2 */
+function q2() {
+    document.getElementById("screen").innerHTML = `
+    <div class="panel">
+        <h2>Question 2</h2>
+        <p>When did she say I love you?</p>
+
+        <input id="answer" placeholder="MM/DD/YYYY"/>
+        <br>
+        <button onclick="checkQ2()">Submit</button>
+    </div>
+    `;
+}
+
+function checkQ2() {
+    alert("lol it's ok even she doesn't know lmao");
+    q3();
+}
+
+/* Q3 */
+function q3() {
+    document.getElementById("screen").innerHTML = `
+    <div class="panel">
+        <h2>Question 3</h2>
+        <p>What's her favorite flower?</p>
+
+        <input id="answer" placeholder="type your answer"/>
+        <br>
+        <button onclick="checkQ3()">Submit</button>
+    </div>
+    `;
+}
+
+function checkQ3() {
+    const val = document.getElementById("answer").value.toLowerCase();
+
+    if (val === "lilies" || val === "lily") {
+        finalFail();
+    } else {
+        finalFail();
+    }
+}
+
+/* FINAL SCREEN */
+function finalFail() {
+    document.getElementById("screen").innerHTML = `
+    <div class="panel">
+        <h1>HAHA LOSER</h1>
+        <p>Up for a rematch?</p>
+
+        <button onclick="rematch()">LET'S GOOO</button>
+        <button onclick="rematch()">NO I'M WEAK I'M GONNA CRY</button>
+    </div>
+    `;
+}
+
+function rematch() {
+    document.getElementById("screen").innerHTML = `
+    <div class="panel">
+        <h2>Alright loser</h2>
+        <p>Click this link to get your invite for the rematch:</p>
+
+        <a href="https://calendar.app.google/JJ2WyeGQ7Fx1SSzA8" target="_blank">
+            <button>OPEN INVITE</button>
         </a>
-
-        </div>
+    </div>
     `;
 }
 
