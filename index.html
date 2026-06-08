@@ -11,6 +11,55 @@
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
+
+@keyframes floatHeart {
+    0% {
+        transform: translateY(100vh) scale(0.6);
+        opacity: 0;
+    }
+    10% { opacity: 1; }
+    100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+    }
+}
+
+.heart {
+    position: absolute;
+    color: #ff4d6d;
+    font-size: 14px;
+    animation: floatHeart 6s linear infinite;
+    pointer-events: none;
+    image-rendering: pixelated;
+}
+
+.panel {
+    display: inline-block;
+    padding: 30px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    background: rgba(0,0,0,0.4);
+    box-shadow: 0 0 20px rgba(255,255,255,0.08);
+    backdrop-filter: blur(6px);
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 8px;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(255,255,255,0.3);
+}
+
+h1, h2, p {
+    text-shadow: 0 0 8px rgba(255,255,255,0.15);
+}
+
 </style>
 ```
 
@@ -28,31 +77,62 @@
     animation: gradientBG 10s ease infinite;
 ">
 
-<div id="screen" style="padding-top:100px;">
+<div id="hearts"></div>
+
+<div id="screen" style="padding-top:80px;">
 
 ```
-<h1>🎮 GAME NIGHT II 🎮</h1>
+<div class="panel">
 
-<p>Player 1: Leigh</p>
-<p>Player 2: Antoine</p>
+    <h1>🎮 GAME NIGHT II 🎮</h1>
 
-<p>Objective: Unlock New Relationship Lore</p>
+    <p>Player 1: Leigh</p>
+    <p>Player 2: Antoine</p>
 
-<button onclick="startGame()" style="padding:10px 20px; font-size:16px; cursor:pointer;">
-    START GAME
-</button>
+    <p>Objective: Unlock New Relationship Lore</p>
+
+    <button onclick="startGame()">
+        START GAME
+    </button>
+
+</div>
 ```
 
 </div>
 
 <script>
 
+function spawnHearts() {
+    const heartsContainer = document.getElementById("hearts");
+
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "♥";
+
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.top = "100vh";
+        heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+
+        heartsContainer.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 7000);
+
+    }, 300);
+}
+
+spawnHearts();
+
 function startGame() {
     document.getElementById("screen").innerHTML = `
+        <div class="panel">
         <h2>Loading Relationship Data...</h2>
         <p>██████████ 100%</p>
         <p>Analyzing compatibility...</p>
         <p>Result: dangerously high affection levels</p>
+        </div>
     `;
 
     setTimeout(showQuest, 2500);
@@ -60,18 +140,15 @@ function startGame() {
 
 function showQuest() {
     document.getElementById("screen").innerHTML = `
+        <div class="panel">
         <h1>QUEST UNLOCKED</h1>
 
         <p>Game Night II: The Lore Expansion Pack</p>
         <p>Do you accept this mission?</p>
 
-        <button onclick="acceptQuest()" style="padding:10px 20px; font-size:16px; cursor:pointer;">
-            ACCEPT
-        </button>
-
-        <button id="noBtn" style="padding:10px 20px; font-size:16px; cursor:pointer;">
-            DECLINE
-        </button>
+        <button onclick="acceptQuest()">ACCEPT</button>
+        <button id="noBtn">DECLINE</button>
+        </div>
     `;
 
     const noBtn = document.getElementById("noBtn");
@@ -85,17 +162,28 @@ function showQuest() {
 
 function acceptQuest() {
     document.getElementById("screen").innerHTML = `
+        <div class="panel">
         <h1>QUEST ACCEPTED 🎉</h1>
 
         <p>Your reward has been unlocked.</p>
 
         <a href="PASTE_YOUR_GOOGLE_CALENDAR_LINK_HERE">
-            <button style="padding:10px 20px; font-size:16px; cursor:pointer;">
-                ADD TO CALENDAR
-            </button>
+            <button>ADD TO CALENDAR</button>
         </a>
+
+        </div>
     `;
 }
+
+/*
+OPTIONAL MUSIC:
+Uncomment this and add an mp3 file if you want background music
+
+let audio = new Audio("your-music.mp3");
+audio.loop = true;
+audio.volume = 0.3;
+audio.play();
+*/
 
 </script>
 
