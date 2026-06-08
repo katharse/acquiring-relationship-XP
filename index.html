@@ -11,7 +11,7 @@
     100% { background-position: 0% 50%; }
 }
 
-/* HEARTS (continuous) */
+/* HEARTS */
 .heart {
     position: fixed;
     top: -20px;
@@ -23,13 +23,6 @@
     pointer-events: none;
     z-index: 1;
     opacity: 0.9;
-}
-
-/* UI */
-#screen {
-    position: relative;
-    z-index: 2;
-    padding-top: 80px;
 }
 
 .panel {
@@ -60,12 +53,6 @@ button:hover {
 h1, h2, p {
     text-shadow: 0 0 8px rgba(255,255,255,0.15);
 }
-
-input {
-    padding: 10px;
-    font-size: 14px;
-    margin-top: 10px;
-}
 </style>
 
 </head>
@@ -87,7 +74,39 @@ input {
 
 <script>
 
-/* CONTINUOUS HEARTS (no stopping) */
+/* ---------- SOUND EFFECTS ---------- */
+function sound(type) {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+
+    o.connect(g);
+    g.connect(ctx.destination);
+
+    if (type === "wrong") {
+        o.frequency.value = 220;
+        g.gain.value = 0.1;
+        o.start();
+        o.stop(ctx.currentTime + 0.2);
+    }
+
+    if (type === "correct") {
+        o.frequency.value = 600;
+        g.gain.value = 0.1;
+        o.start();
+        o.stop(ctx.currentTime + 0.15);
+    }
+
+    if (type === "win") {
+        o.frequency.value = 800;
+        g.gain.value = 0.12;
+        o.start();
+        o.stop(ctx.currentTime + 0.4);
+    }
+}
+
+/* ---------- HEARTS ---------- */
 function spawnHearts() {
     setInterval(() => {
         const heart = document.createElement("div");
@@ -115,7 +134,7 @@ function spawnHearts() {
 
 spawnHearts();
 
-/* ENTRY */
+/* ---------- START SCREEN ---------- */
 document.getElementById("screen").innerHTML = `
 <div class="panel">
 <h1>🎮 GAME NIGHT DATE NIGHT 🎮</h1>
@@ -125,16 +144,11 @@ document.getElementById("screen").innerHTML = `
 
 <p>Objective: Unlock New Relationship Lore</p>
 
-<button onclick="start()">START GAME</button>
+<button onclick="gate()">START GAME</button>
 </div>
 `;
 
-/* START */
-function start() {
-    gate();
-}
-
-/* GATE */
+/* ---------- GATE (FIXED FLOW) ---------- */
 function gate() {
     document.getElementById("screen").innerHTML = `
     <div class="panel">
@@ -142,19 +156,34 @@ function gate() {
         <p>Are you the real Antoine?</p>
 
         <button onclick="q1()">Yes</button>
-        <button onclick="gate()">Try again</button>
+        <button onclick="gateFail()">No</button>
     </div>
     `;
 }
 
-/* Q1 */
+function gateFail() {
+    sound("wrong");
+
+    document.getElementById("screen").innerHTML = `
+    <div class="panel">
+        <h2>Access Denied</h2>
+        <p>Try again.</p>
+
+        <button onclick="gate()">Back</button>
+    </div>
+    `;
+}
+
+/* ---------- Q1 ---------- */
 function q1() {
+    sound("correct");
+
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>Question 1</h2>
         <p>When did you and Leigh first meet?</p>
 
-        <input id="answer" placeholder="MM/DD/YYYY"/>
+        <input id="answer"/>
         <br>
         <button onclick="fail1()">Submit</button>
     </div>
@@ -162,24 +191,28 @@ function q1() {
 }
 
 function fail1() {
+    sound("wrong");
+
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>WRONG!!</h2>
         <p>She's always "baby" / "my love".. who tf is Leigh??? 🤨🤨🤨</p>
 
-        <button onclick="q2()">Next question</button>
+        <button onclick="q2()">Next</button>
     </div>
     `;
 }
 
-/* Q2 */
+/* ---------- Q2 ---------- */
 function q2() {
+    sound("correct");
+
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>Question 2</h2>
         <p>When did she say I love you?</p>
 
-        <input id="answer" placeholder="MM/DD/YYYY"/>
+        <input id="answer"/>
         <br>
         <button onclick="fail2()">Submit</button>
     </div>
@@ -187,57 +220,52 @@ function q2() {
 }
 
 function fail2() {
+    sound("wrong");
+
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>WRONG AGAIN!!</h2>
-        <p>(she also doesn't know the date so you probably don't know either 🤷🏽‍♀️)</p>
+        <p>(she also doesn't know so you're safe 🤷🏽‍♀️)</p>
 
-        <button onclick="q3()">Next question</button>
+        <button onclick="q3()">Next</button>
     </div>
     `;
 }
 
-/* Q3 */
+/* ---------- Q3 ---------- */
 function q3() {
+    sound("correct");
+
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>Question 3</h2>
         <p>What's her favorite flower?</p>
 
-        <input id="answer" placeholder="type answer"/>
+        <input id="answer"/>
         <br>
-        <button onclick="finalLoss()">Submit</button>
+        <button onclick="finalScreen()">Submit</button>
     </div>
     `;
 }
 
-/* FINAL */
-function finalLoss() {
+/* ---------- FINAL ---------- */
+function finalScreen() {
+    sound("win");
+
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>You got it right... but you still lost!!</h2>
         <p>Up for a rematch? 😏</p>
 
-        <button id="yesBtn" onclick="rematch()">no im weak im gonna cry</button>
         <button onclick="rematch()">let's gooo</button>
+        <button onclick="rematch()">no im weak im gonna cry</button>
     </div>
     `;
-
-    setTimeout(() => {
-        const btn = document.getElementById("yesBtn");
-
-        if (!btn) return;
-
-        btn.addEventListener("mouseenter", () => {
-            btn.style.position = "absolute";
-            btn.style.left = Math.random() * 80 + "vw";
-            btn.style.top = Math.random() * 80 + "vh";
-        });
-    }, 50);
 }
 
-/* REWARD */
 function rematch() {
+    sound("win");
+
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>Alright loser</h2>
