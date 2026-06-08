@@ -11,7 +11,7 @@
     100% { background-position: 0% 50%; }
 }
 
-/* HEARTS */
+/* hearts */
 .heart {
     position: fixed;
     top: -20px;
@@ -25,6 +25,29 @@
     opacity: 0.9;
 }
 
+/* TRUE CENTER LAYOUT */
+body {
+    margin:0;
+    color:white;
+    font-family:monospace;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(-45deg, #0f0f0f, #1a1a2e, #16213e, #0f3460);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+}
+
+#hearts {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
 .panel {
     position: relative;
     z-index: 2;
@@ -35,6 +58,7 @@
     background: rgba(0,0,0,0.4);
     box-shadow: 0 0 20px rgba(255,255,255,0.08);
     backdrop-filter: blur(6px);
+    text-align:center;
 }
 
 button {
@@ -50,63 +74,23 @@ button:hover {
     box-shadow: 0 0 12px rgba(255,255,255,0.3);
 }
 
-h1, h2, p {
-    text-shadow: 0 0 8px rgba(255,255,255,0.15);
+input {
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 10px;
 }
 </style>
 
 </head>
 
-<body style="
-    margin:0;
-    color:white;
-    font-family:monospace;
-    text-align:center;
-    height:100vh;
-    overflow:hidden;
-    background: linear-gradient(-45deg, #0f0f0f, #1a1a2e, #16213e, #0f3460);
-    background-size: 400% 400%;
-    animation: gradientBG 10s ease infinite;
-">
+<body>
 
 <div id="hearts"></div>
 <div id="screen"></div>
 
 <script>
 
-/* ---------- SOUND EFFECTS ---------- */
-function sound(type) {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-
-    o.connect(g);
-    g.connect(ctx.destination);
-
-    if (type === "wrong") {
-        o.frequency.value = 220;
-        g.gain.value = 0.1;
-        o.start();
-        o.stop(ctx.currentTime + 0.2);
-    }
-
-    if (type === "correct") {
-        o.frequency.value = 600;
-        g.gain.value = 0.1;
-        o.start();
-        o.stop(ctx.currentTime + 0.15);
-    }
-
-    if (type === "win") {
-        o.frequency.value = 800;
-        g.gain.value = 0.12;
-        o.start();
-        o.stop(ctx.currentTime + 0.4);
-    }
-}
-
-/* ---------- HEARTS ---------- */
+/* hearts */
 function spawnHearts() {
     setInterval(() => {
         const heart = document.createElement("div");
@@ -134,7 +118,7 @@ function spawnHearts() {
 
 spawnHearts();
 
-/* ---------- START SCREEN ---------- */
+/* START SCREEN */
 document.getElementById("screen").innerHTML = `
 <div class="panel">
 <h1>🎮 GAME NIGHT DATE NIGHT 🎮</h1>
@@ -148,7 +132,7 @@ document.getElementById("screen").innerHTML = `
 </div>
 `;
 
-/* ---------- GATE (FIXED FLOW) ---------- */
+/* GATE */
 function gate() {
     document.getElementById("screen").innerHTML = `
     <div class="panel">
@@ -162,8 +146,6 @@ function gate() {
 }
 
 function gateFail() {
-    sound("wrong");
-
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>Access Denied</h2>
@@ -174,16 +156,14 @@ function gateFail() {
     `;
 }
 
-/* ---------- Q1 ---------- */
+/* Q1 */
 function q1() {
-    sound("correct");
-
     document.getElementById("screen").innerHTML = `
     <div class="panel">
-        <h2>Question 1</h2>
+        <h2>If you're Antoine...</h2>
         <p>When did you and Leigh first meet?</p>
 
-        <input id="answer"/>
+        <input id="answer" placeholder="MM/DD/YYYY"/>
         <br>
         <button onclick="fail1()">Submit</button>
     </div>
@@ -191,28 +171,24 @@ function q1() {
 }
 
 function fail1() {
-    sound("wrong");
-
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>WRONG!!</h2>
         <p>She's always "baby" / "my love".. who tf is Leigh??? 🤨🤨🤨</p>
 
-        <button onclick="q2()">Next</button>
+        <button onclick="q2()">Next question</button>
     </div>
     `;
 }
 
-/* ---------- Q2 ---------- */
+/* Q2 */
 function q2() {
-    sound("correct");
-
     document.getElementById("screen").innerHTML = `
     <div class="panel">
-        <h2>Question 2</h2>
-        <p>When did she say I love you?</p>
+        <h2>Ok one more chance...</h2>
+        <p>When did she first say I love you to you?</p>
 
-        <input id="answer"/>
+        <input id="answer" placeholder="MM/DD/YYYY"/>
         <br>
         <button onclick="fail2()">Submit</button>
     </div>
@@ -220,59 +196,64 @@ function q2() {
 }
 
 function fail2() {
-    sound("wrong");
-
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>WRONG AGAIN!!</h2>
-        <p>(she also doesn't know so you're safe 🤷🏽‍♀️)</p>
+        <p>even she doesn't know so why would you? 🤷🏽‍♀️</p>
 
-        <button onclick="q3()">Next</button>
+        <button onclick="q3()">Next question</button>
     </div>
     `;
 }
 
-/* ---------- Q3 ---------- */
+/* Q3 */
 function q3() {
-    sound("correct");
-
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>Question 3</h2>
-        <p>What's her favorite flower?</p>
+        <p>What is YOUR favorite flower?</p>
 
-        <input id="answer"/>
+        <input id="answer" placeholder="type answer"/>
         <br>
         <button onclick="finalScreen()">Submit</button>
     </div>
     `;
 }
 
-/* ---------- FINAL ---------- */
+/* FINAL */
 function finalScreen() {
-    sound("win");
-
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>You got it right... but you still lost!!</h2>
         <p>Up for a rematch? 😏</p>
 
-        <button onclick="rematch()">let's gooo</button>
-        <button onclick="rematch()">no im weak im gonna cry</button>
+        <button onclick="rematch()">let's gooo 😤</button>
+        <button id="runBtn">no im weak im gonna cry 🥹</button>
     </div>
     `;
+
+    setTimeout(() => {
+        const btn = document.getElementById("runBtn");
+
+        if (!btn) return;
+
+        btn.addEventListener("mouseenter", () => {
+            btn.style.position = "absolute";
+            btn.style.left = Math.random() * 80 + "vw";
+            btn.style.top = Math.random() * 80 + "vh";
+        });
+    }, 50);
 }
 
+/* REWARD */
 function rematch() {
-    sound("win");
-
     document.getElementById("screen").innerHTML = `
     <div class="panel">
         <h2>Alright loser</h2>
-        <p>Click below for your rematch invite:</p>
+        <p>Get ready to lose again 😏</p>
 
         <a href="https://calendar.app.google/JJ2WyeGQ7Fx1SSzA8" target="_blank">
-            <button>OPEN INVITE</button>
+            <button>Bring it on 😤</button>
         </a>
     </div>
     `;
