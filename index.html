@@ -227,8 +227,8 @@ function finalScreen() {
         <h2>You got it right... but you still lost!!</h2>
         <p>Up for a rematch? 😏</p>
 
-        <button onclick="rematch()">let's gooo 😤</button>
-        <button id="runBtn">no im weak im gonna cry 🥹</button>
+        <button onclick="rematch()">let's gooo</button>
+        <button id="runBtn">no im weak im gonna cry</button>
     </div>
     `;
 
@@ -238,9 +238,14 @@ function finalScreen() {
         if (!btn) return;
 
         btn.addEventListener("mouseenter", () => {
+            const panel = btn.closest(".panel");
+
+            const maxX = panel.offsetWidth - 120;
+            const maxY = panel.offsetHeight - 60;
+
             btn.style.position = "absolute";
-            btn.style.left = Math.random() * 80 + "vw";
-            btn.style.top = Math.random() * 80 + "vh";
+            btn.style.left = Math.random() * maxX + "px";
+            btn.style.top = Math.random() * maxY + "px";
         });
     }, 50);
 }
