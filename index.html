@@ -3,12 +3,34 @@
 <html>
 <head>
     <title>Game Night II</title>
+
+```
+<style>
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+</style>
+```
+
 </head>
 
-<body style="background:#111; color:white; font-family:monospace; text-align:center; padding-top:100px;">
+<body style="
+    margin:0;
+    color:white;
+    font-family:monospace;
+    text-align:center;
+    height:100vh;
+    overflow:hidden;
+    background: linear-gradient(-45deg, #0f0f0f, #1a1a2e, #16213e, #0f3460);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+">
 
-<div id="screen">
+<div id="screen" style="padding-top:100px;">
 
+```
 <h1>🎮 GAME NIGHT II 🎮</h1>
 
 <p>Player 1: Leigh</p>
@@ -17,61 +39,62 @@
 <p>Objective: Unlock New Relationship Lore</p>
 
 <button onclick="startGame()" style="padding:10px 20px; font-size:16px; cursor:pointer;">
-START GAME
+    START GAME
 </button>
+```
 
 </div>
 
 <script>
 
 function startGame() {
-  document.getElementById("screen").innerHTML = `
-    <h2>Loading Relationship Data...</h2>
-    <p>██████████ 100%</p>
-    <p>Analyzing compatibility...</p>
-    <p>Result: dangerously high affection levels</p>
-  `;
+    document.getElementById("screen").innerHTML = `
+        <h2>Loading Relationship Data...</h2>
+        <p>██████████ 100%</p>
+        <p>Analyzing compatibility...</p>
+        <p>Result: dangerously high affection levels</p>
+    `;
 
-  setTimeout(showQuest, 2500);
+    setTimeout(showQuest, 2500);
 }
 
 function showQuest() {
-  document.getElementById("screen").innerHTML = `
-    <h1>QUEST UNLOCKED</h1>
+    document.getElementById("screen").innerHTML = `
+        <h1>QUEST UNLOCKED</h1>
 
-    <p>Game Night II: The Lore Expansion Pack</p>
-    <p>Do you accept this mission?</p>
+        <p>Game Night II: The Lore Expansion Pack</p>
+        <p>Do you accept this mission?</p>
 
-    <button onclick="acceptQuest()" style="padding:10px 20px; font-size:16px; cursor:pointer;">
-      ACCEPT
-    </button>
+        <button onclick="acceptQuest()" style="padding:10px 20px; font-size:16px; cursor:pointer;">
+            ACCEPT
+        </button>
 
-    <button id="noBtn" style="padding:10px 20px; font-size:16px; cursor:pointer;">
-      DECLINE
-    </button>
-  `;
+        <button id="noBtn" style="padding:10px 20px; font-size:16px; cursor:pointer;">
+            DECLINE
+        </button>
+    `;
 
-  const noBtn = document.getElementById("noBtn");
+    const noBtn = document.getElementById("noBtn");
 
-  noBtn.addEventListener("mouseover", () => {
-    noBtn.style.position = "absolute";
-    noBtn.style.left = Math.random() * 80 + "vw";
-    noBtn.style.top = Math.random() * 80 + "vh";
-  });
+    noBtn.addEventListener("mouseover", () => {
+        noBtn.style.position = "absolute";
+        noBtn.style.left = Math.random() * 80 + "vw";
+        noBtn.style.top = Math.random() * 80 + "vh";
+    });
 }
 
 function acceptQuest() {
-  document.getElementById("screen").innerHTML = `
-    <h1>QUEST ACCEPTED 🎉</h1>
+    document.getElementById("screen").innerHTML = `
+        <h1>QUEST ACCEPTED 🎉</h1>
 
-    <p>Your reward has been unlocked.</p>
+        <p>Your reward has been unlocked.</p>
 
-    <a href="PASTE_YOUR_GOOGLE_CALENDAR_LINK_HERE">
-      <button style="padding:10px 20px; font-size:16px; cursor:pointer;">
-        ADD TO CALENDAR
-      </button>
-    </a>
-  `;
+        <a href="PASTE_YOUR_GOOGLE_CALENDAR_LINK_HERE">
+            <button style="padding:10px 20px; font-size:16px; cursor:pointer;">
+                ADD TO CALENDAR
+            </button>
+        </a>
+    `;
 }
 
 </script>
